@@ -27,7 +27,6 @@ const handleSend = () => {
         <img v-if="!loading" :src="arrow" alt="Send" class="send-icon" />
         <span v-else>...</span>
       </button>
-      <div>nibba</div>
     </div>
   </div>
 </template>
