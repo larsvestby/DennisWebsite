@@ -21,6 +21,10 @@ const goToLearnMore = () => {
     router.push('/learn-more')
 }
 
+const goToLogin = () => {
+    router.push('/login')
+}
+
 const smallChatInput = ref('')
 const loading = ref(false)
 
@@ -79,6 +83,7 @@ onBeforeUnmount(() => {
             <div class="button-wrapper">
                 <button @click="goToChat">Get started</button>
                 <button class="grey" @click="goToLearnMore">Learn more</button>
+                <button class="grey" @click="goToLogin">Login</button>
             </div>
         </div>
         <div class="small-chat">

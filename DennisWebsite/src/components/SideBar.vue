@@ -21,7 +21,13 @@ function toggleSidebar() {
 // Fetch chat sessions from your backend
 async function fetchSessions() {
     try {
-        const response = await axios.get('https://localhost:7153/api/Chat/sessions')
+        const userId = localStorage.getItem("userId") // grab from login storage
+        if (!userId) {
+            console.error("❌ No userId found — are you logged in?")
+            return
+        }
+
+        const response = await axios.get(`https://localhost:7153/api/Chat/sessions/${userId}`)
         console.log('📦 API Response:', response.data)
         sessions.value = response.data.reverse()
     } catch (error) {

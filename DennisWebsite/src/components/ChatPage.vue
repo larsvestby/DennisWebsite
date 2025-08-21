@@ -15,6 +15,8 @@ const loading = ref(false)
 const messages = ref([])
 const sidebarOpen = ref(false)
 
+const userId = localStorage.getItem("userId")
+
 const handleSidebarToggle = (state) => {
   sidebarOpen.value = state
 }
@@ -39,6 +41,7 @@ const sendMessage = async () => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
+        userId: userId,
         sessionId: sessionId.value,
         userInput: userInput.value,
       }),
