@@ -37,12 +37,10 @@ const handleLogin = async () => {
             const data = await response.json()
             console.log("Login success:", data)
 
-            // Save userId in localStorage (for now)
             localStorage.setItem("userId", data.userId)
             localStorage.setItem("token", data.token)
 
-            // TODO: save JWT instead once implemented
-            router.push("/")
+            router.push("/chat")
         }
     } catch (err) {
         console.error(err)

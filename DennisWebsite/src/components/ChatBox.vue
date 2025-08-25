@@ -20,12 +20,10 @@ const scrollToBottom = () => {
   })
 }
 
-// Scroll on mount (first load)
 onMounted(() => {
   scrollToBottom()
 })
 
-// Scroll when new messages or streaming text changes
 watch(
   () => [props.messages.length, props.streamingText],
   () => {

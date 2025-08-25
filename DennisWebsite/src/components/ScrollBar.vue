@@ -1,7 +1,5 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import downArrow from '../assets/downArrow.svg'
-import upArrow from '../assets/upArrow.svg'
 
 const scrollContainer = ref(null)
 

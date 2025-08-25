@@ -15,6 +15,7 @@ const updateInput = (event) => {
 
 const handleSend = () => {
   emit('send')
+  emit('update:modelValue', '')
 }
 </script>
 
