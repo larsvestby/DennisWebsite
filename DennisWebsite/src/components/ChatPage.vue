@@ -1,12 +1,13 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import ChatInput from './ChatInput.vue'
 import ChatBox from './ChatBox.vue'
 import SideBar from './SideBar.vue'
 import ScrollBar from './ScrollBar.vue'
 
 const route = useRoute()
+const router = useRouter()
 
 const sessionId = ref('')
 const userInput = ref('')
@@ -36,10 +37,15 @@ const sendMessage = async () => {
     timestamp: new Date().toISOString()
   })
 
+  const token = localStorage.getItem("token")
+
   try {
     const res = await fetch('https://localhost:7153/api/Chat/stream', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
       body: JSON.stringify({
         userId: userId,
         sessionId: sessionId.value,
@@ -118,6 +124,11 @@ const handleSessionSelected = ({ sessionId: selectedId, messages: newMessages })
 }
 
 onMounted(() => {
+  if (!userId) {
+    router.push('/login')
+    return
+  }
+
   const initialMsg = route.query.msg
   if (initialMsg) {
     userInput.value = initialMsg

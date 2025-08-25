@@ -1,6 +1,4 @@
 <script setup>
-import ChatPage from '../components/ChatPage.vue'
-import WelcomePage from './WelcomePage.vue'
 import GradientText from '../components/GradientText.vue'
 import arrow from '../assets/sendArrow.svg'
 
@@ -13,16 +11,8 @@ const goToChat = () => {
     router.push('/chat')
 }
 
-const goToHome = () => {
-    router.push('/')
-}
-
 const goToLearnMore = () => {
     router.push('/learn-more')
-}
-
-const goToLogin = () => {
-    router.push('/login')
 }
 
 const smallChatInput = ref('')
@@ -83,7 +73,6 @@ onBeforeUnmount(() => {
             <div class="button-wrapper">
                 <button @click="goToChat">Get started</button>
                 <button class="grey" @click="goToLearnMore">Learn more</button>
-                <button class="grey" @click="goToLogin">Login</button>
             </div>
         </div>
         <div class="small-chat">

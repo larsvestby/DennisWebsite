@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import axios from 'axios';
 import bars from '../assets/sidebar.svg'
 import note from '../assets/note.svg'
@@ -12,22 +13,33 @@ const emit = defineEmits(['toggle', 'session-selected'])
 const messages = ref([])
 const selectedSessionId = ref(null)
 
+const router = useRouter()
+
 function toggleSidebar() {
     isOpen.value = !isOpen.value
     emit('toggle', isOpen.value)
     noteVisible.value = !noteVisible.value
 }
 
-// Fetch chat sessions from your backend
+function logout() {
+    localStorage.removeItem("userId")
+    router.push("/")
+}
+
 async function fetchSessions() {
     try {
-        const userId = localStorage.getItem("userId") // grab from login storage
-        if (!userId) {
-            console.error("❌ No userId found — are you logged in?")
+        const token = localStorage.getItem("token")
+        if (!token) {
+            console.error("❌ No token found — are you logged in?")
             return
         }
 
-        const response = await axios.get(`https://localhost:7153/api/Chat/sessions/${userId}`)
+        const response = await axios.get(`https://localhost:7153/api/Chat/sessions/${localStorage.getItem("userId")}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+
         console.log('📦 API Response:', response.data)
         sessions.value = response.data.reverse()
     } catch (error) {
@@ -39,7 +51,18 @@ async function handleSessionClick(sessionId) {
     console.log(`Session #${sessionId} clicked`)
     selectedSessionId.value = sessionId
     try {
-        const response = await axios.get(`https://localhost:7153/api/Chat/messages/${sessionId}`)
+        const token = localStorage.getItem("token")
+        if (!token) {
+            console.error("❌ No token found — are you logged in?")
+            return
+        }
+
+        const response = await axios.get(`https://localhost:7153/api/Chat/messages/${sessionId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+
         console.log(`💬 Messages for session ${sessionId}:`, response.data)
         emit('session-selected', {
             sessionId,
@@ -64,7 +87,7 @@ onMounted(fetchSessions)
     <div>
         <nav class="navbar">
             <div class="navbar-content">
-                <ul>
+                <ul class="navbar-left">
                     <li>
                         <div class="burger-menu" @click="toggleSidebar">
                             <img :src="bars" alt="Bars icon" />
@@ -75,6 +98,9 @@ onMounted(fetchSessions)
                             <img :src="whiteNote" alt="Note icon" />
                         </div>
                     </li>
+                </ul>
+                <ul class="navbar-right">
+                    <li class="logout-btn" @click="logout">Logout</li>
                 </ul>
             </div>
         </nav>
@@ -206,5 +232,33 @@ img {
     width: 100%;
     height: 100%;
     z-index: 1000;
+}
+
+.navbar-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.navbar-left,
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.logout-btn {
+    cursor: pointer;
+    color: white;
+    font-weight: 600;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.15);
+    transition: background 0.2s;
+}
+
+.logout-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
 }
 </style>

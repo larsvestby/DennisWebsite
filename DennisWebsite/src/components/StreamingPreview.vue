@@ -33,8 +33,6 @@ watch(
     lastText = newVal
   }
 )
-
-
 </script>
 
 <template>

@@ -39,6 +39,7 @@ const handleLogin = async () => {
 
             // Save userId in localStorage (for now)
             localStorage.setItem("userId", data.userId)
+            localStorage.setItem("token", data.token)
 
             // TODO: save JWT instead once implemented
             router.push("/")
